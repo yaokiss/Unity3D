@@ -4,8 +4,9 @@ iTween的核心数数值插值，简单说就是给iTween两个数值(开始值�
 这里的数值可以理解为: 数字，坐标点，角度，物体大小，物体颜色，音量大小等等
 
 ## 下载地址
-
-![官方网站](http://itween.pixelplacement.com)
+```
+http://itween.pixelplacement.com
+```
 
 ## iTween类介绍
 ITween 类的公共操作接口均以静态方法的形式提供，可分为三大类；
@@ -20,7 +21,9 @@ iTween类内部定义三种枚举类型
 
 * 1.EaseType：缓动类型枚举
 
-![示例](http://robertpenner.com/easing/easing_demo.html)
+```示例
+http://robertpenner.com/easing/easing_demo.html)
+```
 
 * 2.LoopType : 动画的循环类型枚举
 

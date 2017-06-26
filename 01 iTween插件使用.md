@@ -22,7 +22,7 @@ iTween类内部定义三种枚举类型
 * 1.EaseType：缓动类型枚举
 
 ```示例
-http://robertpenner.com/easing/easing_demo.html)
+http://robertpenner.com/easing/easing_demo.html
 ```
 
 * 2.LoopType : 动画的循环类型枚举

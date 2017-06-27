@@ -111,25 +111,183 @@ public class ItweenTest : MonoBehaviour {
 }
 ```
 
+## Accurate Lob案例
 
+```C#
+using UnityEngine;
+using System.Collections;
 
+public class Demo : MonoBehaviour {
+    private Vector3[] vt = new Vector3[3];
+    public GameObject GG;//声明准星
+    private Vector3 V;//准星的位置
+    public GameObject go;//克隆球
+	void Start () {
+        vt[0] = new Vector3(0, 0, 0);
+    }
+    void Update () {
+        
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);//射线
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit))
+            {
+                iTween.MoveUpdate(GG, new Vector3(hit.point.x, 0.1f, hit.point.z), 0.1f);//准星位置
+                vt[1] = new Vector3(hit.point.x / 2, 5, hit.point.z / 2);
+                vt[2] = hit.point;
+                if (Input.GetKeyDown(KeyCode.Mouse0))
+                {
+                    if (hit.collider.name == "Plane")
+                    {
+                        V = hit.point;
+                        
+                        GameObject a = Instantiate(go,new Vector3 (0,0,0), Quaternion.identity) as GameObject;
+                        iTween.MoveTo(a, iTween.Hash("path",vt,"time",0.1f,"speed",5f));
+                        Destroy(a, 5f);
+                    }
+                }  
+            }
+        }
+      
+}
+```
 
+## Using Callbacks案例
 
+```C#
 
+using UnityEngine;
+using System.Collections;
+using UnityEngine.UI;
 
+public class UsingCallbacks : MonoBehaviour {
+    public Text text;
+    public Button button;
 
+    //声明位置和角度
+    private Vector3 start;
+    private Quaternion Rot;
+    void Awake()
+    {
+        text = GameObject.Find("Canvas/Text").GetComponent<Text>();
+        button = GameObject.Find("Canvas/Button").GetComponent<Button>();
+        button.onClick.AddListener(OnButton);
+        start = this.transform.position;    //记住初始位置
+        Rot = this.transform.rotation;//记住初始角度
+        button.gameObject.SetActive(false);
+    }
 
+    void OnButton()
+    {
+        text.text = string.Empty;
+        this.transform.position = start;
+        this.transform.rotation = Rot;
+        Start();
+        button.gameObject.SetActive(false);
+    }
+	void Start () {
+        iTween.MoveBy(this.gameObject, iTween.Hash("y", 3f, "time", 1.5f, "easetype", iTween.EaseType.easeInCubic,
+                                               "onstart", "Show", "onstarttarget", this.gameObject, "onstartparams", "上升开始",
+                                               "oncomplete", "Show", "oncompletetarget", this.gameObject, "oncompleteparams", "上升结束"));
+                                                                          //延迟几秒执行
+        iTween.RotateBy(this.gameObject,iTween.Hash("z",0.25f,"time",1.5f,"delay",2f,"easetype",iTween.EaseType.easeInSine,
+                                                "onstart", "Show", "onstarttarget", this.gameObject, "onstartparams", "旋转开始",
+                                                "oncomplete", "Show", "oncompletetarget", this.gameObject, "oncompleteparams", "旋转结束"));
 
+        iTween.MoveTo(this.gameObject,iTween.Hash("y",1f,"time",1.5f,"delay",4f,"easetype",iTween.EaseType.easeInQuart,
+                                               "onstart", "Show", "onstarttarget", this.gameObject, "onstartparams", "下降开始",
+                                               "oncomplete", "Show", "oncompletetarget", this.gameObject, "oncompleteparams", "下降结束"));
 
+        iTween.ShakePosition(GameObject.Find("Main Camera"),iTween.Hash("amount",new Vector3(1,1,1),"time",1f,"delay",5.6f,"easeType",iTween.EaseType.easeInBounce,
+                                                 "onstart", "Show", "onstarttarget", this.gameObject, "onstartparams", "震动开始",
+                                               "oncomplete", "ShowStop", "oncompletetarget", this.gameObject, "oncompleteparams", "所有动画结束"));
 
+	}
+    void Show(string text)
+    {
+        this.text.text += text + "\n";
+    }
+    void ShowStop(string text)
+    {
+        this.text.text += text + "\n";
+        button.gameObject.SetActive(true);
+    }
+}
 
+```
 
+## Gridmovement案例
 
+```C#
 
+using UnityEngine;
+using System.Collections;
 
+public class GridmovementDemo : MonoBehaviour {
+    private Color color;
+	void Start () {
+        color = GetComponent<MeshRenderer>().material.color;
+	}
+	void OnMouseEnter()
+    {
+        iTween.ColorTo(this.gameObject, Color.green, 0.1f);//颜色变为绿色
+        iTween.MoveTo(this.gameObject,iTween.Hash("y",0.2f,"time",0.1f));//向上移动
+    }
+    void OnMouseExit()
+    {
+        iTween.ColorTo(this.gameObject, color, 0.1f);//返回初始颜色
+        iTween.MoveTo(this.gameObject, iTween.Hash("y", 0, "time", 0.1f));
+    }
+    void OnMouseDown()
+    {
+        iTween.ColorTo(this.gameObject, Color.red, 0.1f);//颜色变成红色
+        iTween.MoveTo(this.gameObject, iTween.Hash("y", 0, "time", 0.1f));
+        this.gameObject.SendMessageUpwards("Move", this.transform.position);//向父集发送消息
 
+    }
+	void Update () {
 
+	}
+}
 
+————————————————————————————
+using UnityEngine;
+using System.Collections;
+
+public class Floor : MonoBehaviour {
+    public GameObject Cube;
+    public GameObject Sphere;
+    GameObject ball;
+    public int row =9;
+    public int line =9;
+	// Use this for initialization
+	void Start () {
+        ball = Instantiate(Sphere, new Vector3(row / 2, 0.7f, line / 2), Quaternion.identity) as GameObject;
+        //设计一个9*9黑白相间的cube
+        for (int i = 0; i < row; i++)
+        {
+            for (int j = 0; j < line; j++)
+            {
+                GameObject floor = Instantiate(Cube,new Vector3(j,0,i),Quaternion.identity) as GameObject;
+                floor.transform.SetParent(this.gameObject.transform);//设置地板的父集为挂脚本的物体
+                if((i+j)%2 == 0)
+                {
+                    floor.GetComponent<MeshRenderer>().material.color = Color.black;
+                }
+            }
+        }
+	}
+	void Move(Vector3 V)
+    {
+        iTween.MoveTo(ball, iTween.Hash("x", V.x, "time", 1f, "easetype", iTween.EaseType.linear));
+        iTween.MoveTo(ball, iTween.Hash("z", V.z, "time", 1f, "delay", 1f, "easetype", iTween.EaseType.linear));
+    }
+	// Update is called once per frame
+	void Update () {
+	
+	}
+}
+
+```
 
 
 

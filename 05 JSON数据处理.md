@@ -62,15 +62,45 @@ JSON结构有两种结构，这两种结构就是对象和数组两种结构，�
 }
 ```
 
+案例
+```
+{"firstName":"Brett","lastName":"McLaughlin"}
+```
+firstName和lastName是键（key），而Brett和McLaughlin是值（value）
 
+2.数组
 
+数组在js中是中括号"[]"括起来的内容，数据结构为[“java”,“javascript”,“vb”,…]，取值方式和所有语言中一样，使用索引获取，字段值的数据类型可以是数字、字符串、数组、对象几种，
 
+当需要表示一组值时，JSON不但能够提高可读性。而且可以减少复杂性，如果使用JSON，就只需要将多个花括号的记录分组在一起。
 
+案例：通过JSON数据存储三位外国人的名字及邮箱
+```
+{
+    "people":[
+        {"firstName":"Brett","lastName":"McLaughlin","email":"aaa@163.com"},
+        {"firstName":"Jason","lastName":"Hunter","email":"bbbb@163.com"},
+        {"firstName":"Elliotte","lastName":"Harold","email":"cccc@163.com"}
+    ]
+}
+```
 
+具体形式
 
+数组是值（value）的有序集合
+* 一个数组以“[”（左中括号）开始，“]”（右中括号）结束。
+* 值之间使用“,”（逗号）分隔。
 
+![](https://nts.newbieol.com/static/k25/03_%E5%BC%95%E6%93%8E%E9%AB%98%E7%BA%A7%E8%BF%9B%E9%98%B6/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E5%8F%8AHTTP%E5%BA%94%E7%94%A8/JSON/JSON%E7%AE%80%E4%BB%8B/images/20161206174805.jpg)
 
-
+```
+{
+    "学生": [
+        {"姓名":"小明","年龄":23},
+        {"姓名":"大憨","年龄":24}
+    ]
+}
+```
 
 
 

@@ -61,15 +61,46 @@ public class BundleAssets : MonoBehaviour {
     }   
 }
 ```
+![](https://nts.newbieol.com/static/k25/03_%E5%BC%95%E6%93%8E%E9%AB%98%E7%BA%A7%E8%BF%9B%E9%98%B6/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E5%8F%8AHTTP%E5%BA%94%E7%94%A8/AssetBundle/images/Image4.png)
+
 点击菜单栏的Build/ModleAsset上传，然后再Project点击右键打开文件夹，将文件移动到unity文件夹中。
 
 ## 下载AssetBundle
 
+```
+using UnityEngine;
+using System.Collections;
+
+public class AssetsBundle : MonoBehaviour {
+
+    public string URL = "http://localhost/UNity/modle";
+
+    void Start()
+    {
+        StartCoroutine(DownLoadAsset(URL));
+    }
+
+    IEnumerator DownLoadAsset(string URL)
+    {
+        WWW www = new WWW(URL);
+
+        yield return www;
+
+        if(www.isDone)
+        {
+            GameObject go = www.assetBundle.LoadAsset("Terrain.prefab") as GameObject;
+            GameObject.Instantiate(go);
+        }
+        www.Dispose();
+    }
+}
+```
+
+![](https://nts.newbieol.com/static/k25/03_%E5%BC%95%E6%93%8E%E9%AB%98%E7%BA%A7%E8%BF%9B%E9%98%B6/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E5%8F%8AHTTP%E5%BA%94%E7%94%A8/AssetBundle/images/Image6.png)
 
 
-
-
-
+```WWW.LoadFromCacheOrDownload();```这个下载函数是AssetBundle专用的，可以很方便地处理AssetBundle文件的版本更新。在通过此函数下载AssetBundle后，资源会被缓存至本地储存起来；在下次调用此函数时，如果AssetBundle有新版本则下载新版本，如果没有新版本则不下载而直接从本地读取。
+缓存的资源可以通过Caching.CleanCache()函数全部删除。
 
 
 

@@ -309,10 +309,97 @@ PlayerData DeSerializerData()
 ```
 
 
+## 课上代码
 
+```
+using UnityEngine;
+using System.Collections;
+using System.IO;
+using System.Xml;
+using System.Xml.Serialization;
+public class TestXmlSerializer : MonoBehaviour {
 
+    public GameObject Player;//定义玩家对象
+    PlayerDate date;//定义玩家数据
+    string filepath;//路径
+	void Start () {
+        filepath = Application.dataPath + "/PlayerDate.xml";//创建Xml文件路径
+        date = new PlayerDate();//实例化对象
+        Player = GameObject.Find("Cube");
 
+	}
+    void OnGUI()
+    {
+        if(GUI.Button(new Rect(0,0,100,40),"SaveDate"))
+        {
+            
+            date.name = "aaa";
+            date.HP = 1000;
+            date.MP = 100;
+            date.Attack = 45;
+            date.Armor = 10;
+            date.Crit = 1.1;
+            date.pos.X = Player.transform.position.x;
+            date.pos.Y = Player.transform.position.y;
+            date.pos.Z = Player.transform.position.z;
+            SaveDate(date);
+        }
+        if(GUI.Button(new Rect(0,40,100,40),"LoadDate"))
+        {
+            date = LoadDate();
+            Vector3 v3 = new Vector3(date.pos.X, date.pos.Y, date.pos.Z);
+            Player.transform.position = v3;
 
+        }
+    }
+    void SaveDate(PlayerDate player)
+    {
+        StreamWriter sw; //流/写入器对象
+        FileInfo info = new FileInfo(filepath);//创建filepath路径下的文件对象
+        
+        //判断路径是否存在，不存在就创建，存在就删除在创建
+        if(!info.Exists)
+        {
+            sw = info.CreateText();
+        }
+        else
+        {
+            info.Delete();
+            sw = info.CreateText();
+        }
+        XmlSerializer xs = new XmlSerializer(typeof(PlayerDate));
+        xs.Serialize(sw, date);//  序列化方法（传递流/写入器对象，和玩家数据对象
+        sw.Close();//关闭流
+    }
+    PlayerDate LoadDate()
+    {
+        PlayerDate play = new PlayerDate();
+        FileStream fs = new FileStream(filepath, FileMode.Open);//打开filepath路径中的xml文件
+        XmlSerializer xs = new XmlSerializer(typeof(PlayerDate));//指定需要操作的对象
+        play = (PlayerDate)xs.Deserialize(fs);
+
+        return play;
+
+    }
+}
+public class PlayerDate  //需要序列化的玩家数据
+{
+    //玩家数据
+    public string name;
+    public int HP;
+    public int MP;
+    public int Attack;
+    public int Armor;
+    public double Crit;
+
+    public Pos pos;
+    public struct Pos   //结构类型
+    {
+        public float X, Y, Z;//坐标
+    }
+
+}
+```
 
 
 

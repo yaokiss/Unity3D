@@ -195,8 +195,103 @@ DELETE FROM Person WHERE LastName = 'Wilson'
 
 
 
+```
+using UnityEngine;
+using System.Collections;
+using MySql.Data;
+using MySql.Data.MySqlClient;
+public class MySQLtest : MonoBehaviour {
+    //连接数据库的IP
+    public string ServerIP = "localhost";
+    //数据库的名字
+    public string dataName = "yao";
+    //用户名
+    public string userID = "root";
+    //密码
+    public string Password = "yaojian";
 
+    MySqlConnection mysqlconnetion;
 
+    //连接数据库的字符串
+    string connetionStr = "";
+
+    string CmdText = "Select * From account;";
+    string insert = "Insert into account values('xiaoqiang',1212,'男',12,'xiaoqiang@163.com');";
+    string delete = "Delete From account Where 用户名 = 'xiaoqiang'";
+    //string update = "Update account Set 用户名 ='小小' Where 用户名 = 'qqq';";
+    string update = "Update account Set 年龄 = 111 where 用户名 = '小小'";
+    string chazhao = "Select * From account Where 年龄 >=20;";
+    void Start()
+    {
+
+        connetionStr = string.Format("Server = {0};Database= {1};user ID = {2};Password = {3}", ServerIP, dataName, userID, Password);
+        mysqlconnetion = new MySqlConnection(connetionStr);
+        if (mysqlconnetion != null)
+        {
+            mysqlconnetion.Open();
+        }
+        Insert(insert);
+        Delete(delete);
+        upData(update);
+        ChaZhao(chazhao);
+
+        //MySqlCommand commdan = new MySqlCommand(CmdText, mysqlconnetion);
+        //MySqlDataReader reader = commdan.ExecuteReader();//反馈信息调用ExecuteReader
+        //if (reader.HasRows)//判断是否有行数
+        //{
+        //    while (reader.Read())
+        //    {
+        //        string dataStr = "";
+        //        dataStr += reader["用户名"] + ",";
+        //        print(dataStr);
+        //    }
+        //}
+
+        
+    }
+
+    void Insert(string insert)
+    {
+        //插入
+        MySqlCommand command = new MySqlCommand(insert, mysqlconnetion);
+        int hasRows = command.ExecuteNonQuery();//修改函数时调用ExecuteNonQuery
+        print(hasRows + " 插入");
+    }
+
+    void Delete(string delete)
+    {
+        //删除
+        MySqlCommand delet = new MySqlCommand(delete, mysqlconnetion);
+        int del = delet.ExecuteNonQuery();
+        print(del + " 删除");
+    }
+    void upData(string update)
+    {
+        //改
+        MySqlCommand gai = new MySqlCommand(update, mysqlconnetion);
+        int ga = gai.ExecuteNonQuery();
+        print(ga + " 改");
+    }
+    void ChaZhao(string chazhao)
+    {
+        //查找
+        MySqlCommand cz = new MySqlCommand(chazhao, mysqlconnetion);
+       // int cha = cz.ExecuteNonQuery();
+       // print(cha + " 查找");
+
+        MySqlDataReader reader = cz.ExecuteReader();//反馈信息调用ExecuteReader
+        if (reader.HasRows)//判断是否有行数
+        {
+            while (reader.Read())
+            {
+                string dataStr = "";
+                dataStr += reader["用户名"] + "," + reader["密码"] + "," + reader["性别"] + "," + reader["年龄"] + "," + reader["年龄"];
+                print(dataStr);
+            }
+        }  
+    }
+}
+```
 
 
 

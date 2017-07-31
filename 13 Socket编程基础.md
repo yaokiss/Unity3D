@@ -70,17 +70,75 @@ Socket定义
 * 3.服务端welcoming socket 监听到客户端连接，创建connection socket。
 (负责和客户端通信)
 
+## Socket流式（服务器和客户端）
 
+服务器端的Socket（至少需要两个）
 
+* 一个负责接收客户端连接请求（但不负责与客户端通信）
 
+* 每成功接收到一个客户端的连接便在服务端产生一个对应的负责通信的Socket，在接收客户端连接时创建
 
+* 为每个连接成功的客户端请求在服务器端都创建一个对应的Socket（负责和客户端通信）
 
+### 客户端的Socket
 
+* 客户端Socket，必须指定要连接的服务端IP地址和端口，通过穿件一个socket对象来初始化一个服务器端的TCP连接
 
+## Socket的通信过程
 
+### 服务器端
 
+* 申请一个Socket
 
+* 绑定到一个IP地址和一个端口上
 
+* 开启侦听，等待接收连接
+
+* 服务器端接到连接请求后。产生一个新的Socket（端口大于1024）与客户端建立连接并进行通信，原件监听Socket继续监听
+
+### 客户端
+
+* 申请一个Socket
+
+* 连接服务器（指明IP地址和端口号）
+
+## Socket的构造函数。
+
+### 连接通道构造函数完成
+
+```
+public Socket(AddressFamily addressFamily, SocketType socketType, ProtocolType protocolType)
+```
+
+* AddressFamily 成员指定Socket用来解析地址的寻址方案，例如 InterNetwork指示当Socket使用一个IP版本4地址连接
+
+* SocketType定义要打开的Socket的类型
+
+* Socket类型使用ProtocolType枚举项Windows Socket API 通知所请求协议
+
+![](https://nts.newbieol.com/static/k25/03_%E5%BC%95%E6%93%8E%E9%AB%98%E7%BA%A7%E8%BF%9B%E9%98%B6/Socket%E9%80%9A%E4%BF%A1/Socket/Socket/images/Image6.png)
+
+## Socket方法
+
+![](https://nts.newbieol.com/static/k25/03_%E5%BC%95%E6%93%8E%E9%AB%98%E7%BA%A7%E8%BF%9B%E9%98%B6/Socket%E9%80%9A%E4%BF%A1/Socket/Socket/images/Image7.png)
+
+注意事项
+
+![](https://nts.newbieol.com/static/k25/03_%E5%BC%95%E6%93%8E%E9%AB%98%E7%BA%A7%E8%BF%9B%E9%98%B6/Socket%E9%80%9A%E4%BF%A1/Socket/Socket/images/Image8.png)
+
+## Socket通信基本流程图
+
+![](https://nts.newbieol.com/static/k25/03_%E5%BC%95%E6%93%8E%E9%AB%98%E7%BA%A7%E8%BF%9B%E9%98%B6/Socket%E9%80%9A%E4%BF%A1/Socket/Socket/images/Image9.png)
+
+![](https://nts.newbieol.com/static/k25/03_%E5%BC%95%E6%93%8E%E9%AB%98%E7%BA%A7%E8%BF%9B%E9%98%B6/Socket%E9%80%9A%E4%BF%A1/Socket/Socket/images/Image10.png)
+
+## 传输协议
+
+![](https://nts.newbieol.com/static/k25/03_%E5%BC%95%E6%93%8E%E9%AB%98%E7%BA%A7%E8%BF%9B%E9%98%B6/Socket%E9%80%9A%E4%BF%A1/Socket/Socket/images/Image11.png)
+
+## 扩展
+
+![](https://nts.newbieol.com/static/k25/03_%E5%BC%95%E6%93%8E%E9%AB%98%E7%BA%A7%E8%BF%9B%E9%98%B6/Socket%E9%80%9A%E4%BF%A1/Socket/Socket/images/Image12.png)
 
 
 

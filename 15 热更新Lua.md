@@ -23,15 +23,7 @@ and、 break 、do 、else 、elseif、 end、 false、 for、 function 、if、
 * 单行注释是--注释内容
 * 多行注释--[[ 注释内容]]--
 
-
-
-
-
-
-
-
-
-
+https://github.com/andycai/luaprimer/blob/master/01.md
 
 
 

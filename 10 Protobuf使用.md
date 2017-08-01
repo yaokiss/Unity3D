@@ -280,12 +280,120 @@ Unity输出内容：
 
 
 
+```
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
+namespace Prtot
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Person p1 = new Person() { Name = "小明", Age = 127, Higth = 101 };
+            Person p2 = new Person() { Name = "小小", Age = 127, Higth = 127 };
 
+            List<Person> persons = new List<Person>() { p1, p2 };
+            Console.WriteLine("序列化");
 
+            string personstr = ProtobufHelper.Serialize(persons);
+            Console.WriteLine(personstr);
 
+            Console.WriteLine("反序列化");
+            List<Person> perList = ProtobufHelper.DeSerialize<List<Person>>(personstr);
+            foreach (var person in perList)
+            {
+                Console.WriteLine(person);
+            }
 
+            Console.Read();
+        }
+    }
+}
+```
+```
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using ProtoBuf;
+using System.IO;
 
+namespace Prtot
+{
+    class ProtobufHelper
+    {
+
+        //序列化string  返回字符串
+        public static string Serialize<T>(T t)
+        {
+            using (MemoryStream ms = new MemoryStream ())
+            {
+                Serializer.Serialize<T>(ms, t);
+                return Encoding.UTF8.GetString(ms.ToArray());
+            }
+        }
+
+        //序列化文件
+        public static void Serialize<T>(string path,T date)
+        {
+            using(Stream file = File.Create(path))
+            {
+                Serializer.Serialize<T>(file, date);
+                file.Close();
+            }
+        }
+
+        //根据字符串反序列化成对象
+        public static T DeSerialize<T>(string content)
+        {
+            using (MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(content)))
+            {
+               
+                T t = Serializer.Deserialize<T>(ms);
+                return t;
+            }
+           
+        }
+        //根据文件流返回对象
+        public static T DeSerialize<T>(Stream filestream)
+        {
+            return Serializer.Deserialize<T>(filestream);
+        }
+    }
+}
+```
+```
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using ProtoBuf;
+
+namespace Prtot
+{
+    [ProtoContract]
+    class Person
+    {
+        [ProtoMember(3)]
+        public string Name { get; set; }
+        [ProtoMember(2)]
+        public long Age { get; set; }
+        [ProtoMember(1)]
+        public UInt16 Higth { get; set; }
+
+        public override string ToString()
+        {
+            return Name + "," + Age + "," + Higth;
+        }
+    }
+}
+```
 
 
 

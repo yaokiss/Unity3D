@@ -2,7 +2,7 @@
 
 ## 服务器端
 
-```
+```C#
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -120,7 +120,7 @@ namespace ServerSocket
 ```
 
 ## 客户端
-```
+```C#
 using UnityEngine;
 using System.Collections;
 using System.Net;
